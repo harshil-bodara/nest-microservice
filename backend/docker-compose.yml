@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  microservice-one:
+    build: ../microservice-one
+    environment:
+      PORT: 3001
+      MICROSERVICE_ONE_HOST: microservice-one
+      MICROSERVICE_ONE_PORT: 3001
+    ports:
+      - "3001:3001"
+    networks:
+      - app-network
+
+  backend:
+    build: ./
+    environment:
+      PORT: 3000
+      MICROSERVICE_ONE_HOST: microservice-one
+      MICROSERVICE_ONE_PORT: 3001
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+    depends_on:
+      - microservice-one
+
+networks:
+  app-network:
+    driver: bridge
